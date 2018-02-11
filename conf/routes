@@ -1,0 +1,3 @@
+GET     /                                               controllers.PhotoController.list
+GET     /:id                                            controllers.PhotoController.getPhoto(id: domain.PhotoId)
+POST    /                                               controllers.PhotoController.uploadPhoto
