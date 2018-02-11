@@ -19,6 +19,8 @@ class PhotoServiceAlg[F[_]](
 
   import ME._
 
+  val listPhotoIds: F[Seq[PhotoId]] = durableStore.listPhotoIds
+
   def getPhotoById(id: PhotoId): F[Option[Photo]] = {
     val handleCacheMiss =
       for {
@@ -41,6 +43,7 @@ class PhotoServiceAlg[F[_]](
       photoId <- lift(durableStore.putPhoto(photo))
       _       <- lift(writeToCache(photoId, photo))
       _       <- lift(sendPhotoUploadedEvent(photoId))
+      _       <- lift(logging.info(s"Successfully uploaded photo $photoId"))
     } yield photoId).value
   }
 

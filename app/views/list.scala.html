@@ -1,4 +1,4 @@
-@(ids: List[domain.PhotoId])
+@(ids: Seq[domain.PhotoId])
 
 <!DOCTYPE html>
 <html>
@@ -17,8 +17,11 @@
 
         <h2>Upload a photo</h2>
         <div>
-            <form method="post" action="@controllers.routes.PhotoController.uploadPhoto">
-                <input type="file" name="file">
+            <form
+            method="post"
+            action="@controllers.routes.PhotoController.uploadPhoto"
+            enctype="multipart/form-data">
+                <input type="file" name="file" accept="image/png">
                 <button type="submit">Upload</button>
             </form>
         </div>

@@ -19,7 +19,7 @@ class AppComponents(context: ApplicationLoader.Context)
       .connect(ByteArrayCodec.INSTANCE)
       .async()
     val redisClient = new AsyncRedisClient(asyncCommands)
-    new RedisCache(redisClient)
+    new RedisCache(redisClient, PlayLogging)
   }
 
   private val s3DurableStore = {
