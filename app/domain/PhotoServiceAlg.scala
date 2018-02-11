@@ -40,7 +40,7 @@ class PhotoServiceAlg[F[_]](
       photo   <- EitherT(validation.validatePhoto(uploadedBytes))
       photoId <- lift(durableStore.putPhoto(photo))
       _       <- lift(writeToCache(photoId, photo))
-      _       <- lift(sendUploadedPhotoEvent(photoId))
+      _       <- lift(sendPhotoUploadedEvent(photoId))
     } yield photoId).value
   }
 
@@ -65,9 +65,9 @@ class PhotoServiceAlg[F[_]](
       .putPhoto(id, photo)
       .handleErrorWith(e => logging.warn("Cache write failed", e))
 
-  private def sendUploadedPhotoEvent(id: PhotoId): F[Unit] = {
+  private def sendPhotoUploadedEvent(id: PhotoId): F[Unit] = {
     events
-      .sendUploadedPhotoEvent(id)
+      .sendPhotoUploadedEvent(id)
       .handleErrorWith(e => logging.warn(s"Failed to send 'uploaded photo' event for photo $id", e))
   }
 

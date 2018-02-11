@@ -26,7 +26,7 @@ class PhotoServiceAlgSpec extends FlatSpec {
       dummyLogging
     )
 
-    assert(photoService.getPhotoById(PhotoId(1)) == Success(Some(photo)))
+    assert(photoService.getPhotoById(photoId) == Success(Some(photo)))
   }
 
   it should "look in the durable store if the cache is a miss" in {
@@ -43,7 +43,7 @@ class PhotoServiceAlgSpec extends FlatSpec {
       dummyLogging
     )
 
-    assert(photoService.getPhotoById(PhotoId(1)) == Success(Some(photo)))
+    assert(photoService.getPhotoById(photoId) == Success(Some(photo)))
   }
 
   it should "succeed even if both the cache lookup and cache write fail" in {
@@ -60,7 +60,7 @@ class PhotoServiceAlgSpec extends FlatSpec {
       dummyLogging
     )
 
-    assert(photoService.getPhotoById(PhotoId(1)) == Success(Some(photo)))
+    assert(photoService.getPhotoById(photoId) == Success(Some(photo)))
   }
 
   it should "fail if the cache lookup is a miss and the durable store read fails" in {
@@ -72,7 +72,7 @@ class PhotoServiceAlgSpec extends FlatSpec {
       dummyLogging
     )
 
-    assert(photoService.getPhotoById(PhotoId(1)).isFailure)
+    assert(photoService.getPhotoById(photoId).isFailure)
   }
 
   behavior of "uploading a photo"
@@ -113,7 +113,7 @@ class PhotoServiceAlgSpec extends FlatSpec {
     assert(photoService.uploadPhoto(uploadedBytes) == Success(Right(photoId)))
   }
 
-  private val photoId       = PhotoId(1)
+  private val photoId       = PhotoId("abc")
   private val photo         = Photo(Array(1, 2, 3))
   private val uploadedBytes = UploadedBytes(Array(1, 2, 3))
 
@@ -148,11 +148,11 @@ class PhotoServiceAlgSpec extends FlatSpec {
   }
 
   private val dummyEvents = new EventsAlg[Try] {
-    override def sendUploadedPhotoEvent(id: PhotoId): Try[Unit] = Success(())
+    override def sendPhotoUploadedEvent(id: PhotoId): Try[Unit] = Success(())
   }
 
   private val failingEvents = new EventsAlg[Try] {
-    override def sendUploadedPhotoEvent(id: PhotoId): Try[Unit] = epicFail
+    override def sendPhotoUploadedEvent(id: PhotoId): Try[Unit] = epicFail
   }
 
   private val dummyLogging = new LoggingAlg[Try] {

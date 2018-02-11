@@ -4,6 +4,6 @@ import scala.language.higherKinds
 
 abstract class EventsAlg[F[_]] {
 
-  def sendUploadedPhotoEvent(id: PhotoId): F[Unit]
+  def sendPhotoUploadedEvent(id: PhotoId): F[Unit]
 
 }
