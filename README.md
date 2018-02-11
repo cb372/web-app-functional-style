@@ -1,11 +1,5 @@
-# OVO Bootcamp - CircleCI and CloudFormation
+Example code for https://slides.com/cb372/web-app-functional-style
 
-Companion code for the Bootcamp session on automated infrastructure and deployment
+This is a hypothetical photo storage service implemented in Scala + Play.
 
-Slides are here: https://docs.google.com/presentation/d/1Y71zLESruYtBpoSefqFfHtszjo66ygQP9f_zI7key3Q/edit?usp=sharing
-
-## How to run the app locally
-
-```
-$ sbt run
-```
+Photos are stored in a Redis cache and S3.

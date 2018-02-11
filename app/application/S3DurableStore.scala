@@ -10,7 +10,6 @@ class S3DurableStore(s3Client: S3Client) extends DurableStoreAlg[PhotoServiceOp]
   override val listPhotoIds: PhotoServiceOp[Seq[PhotoId]] = op { requestId =>
     // pretend we are sending the request ID to the backend here...
     s3Client.listKeys("photos/").map { keys =>
-      println(keys)
       keys.collect {
         case key if key.startsWith("photos/") => PhotoId(key.replaceFirst("photos/", ""))
       }
