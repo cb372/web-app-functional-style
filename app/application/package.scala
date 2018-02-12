@@ -8,7 +8,7 @@ package object application {
 
   def op[A](run: RequestId => Task[A]): PhotoServiceOp[A] = Kleisli(run)
 
-  def ignoreRequestId[A](task: Task[A]): PhotoServiceOp[A] = Kleisli.liftF(task)
+  def lift[A](task: Task[A]): PhotoServiceOp[A] = Kleisli.liftF(task)
 
   def pure[A](a: A): PhotoServiceOp[A] = Kleisli.pure[Task, RequestId, A](a)
 
