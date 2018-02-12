@@ -24,7 +24,7 @@ class PhotoServiceAlg[F[_]](
   def getPhotoById(id: PhotoId): F[Option[Photo]] = {
     val handleCacheMiss =
       for {
-        photo <- getFromDurableStore(id)
+        photo <- durableStore.getPhoto(id)
         _     <- photo.fold(pure(()))(writeToCache(id, _))
       } yield photo
 
@@ -54,13 +54,6 @@ class PhotoServiceAlg[F[_]](
         for {
           _ <- logging.warn("Cache lookup failed", e)
         } yield None
-      }
-
-  private def getFromDurableStore(id: PhotoId): F[Option[Photo]] =
-    durableStore
-      .getPhoto(id)
-      .onError {
-        case e: Throwable => logging.warn("Failed to retrieve from filestore", e)
       }
 
   private def writeToCache(id: PhotoId, photo: Photo): F[Unit] =
