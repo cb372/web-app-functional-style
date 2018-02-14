@@ -34,6 +34,7 @@ class PhotoServiceAlgSpec extends FlatSpec {
       override def getPhoto(id: PhotoId): Try[Option[Photo]] =
         if (id == photoId) Success(Some(photo)) else Success(None)
       override def putPhoto(photo: Photo): Try[PhotoId] = epicFail
+      override val listPhotoIds: Try[Seq[PhotoId]]      = Success(Nil)
     }
     val photoService = new PhotoServiceAlg[Try](
       durableStore,
@@ -51,6 +52,7 @@ class PhotoServiceAlgSpec extends FlatSpec {
       override def getPhoto(id: PhotoId): Try[Option[Photo]] =
         if (id == photoId) Success(Some(photo)) else Success(None)
       override def putPhoto(photo: Photo): Try[PhotoId] = epicFail
+      override val listPhotoIds: Try[Seq[PhotoId]]      = Success(Nil)
     }
     val photoService = new PhotoServiceAlg[Try](
       durableStore,
@@ -120,11 +122,13 @@ class PhotoServiceAlgSpec extends FlatSpec {
   private val emptyDurableStore = new DurableStoreAlg[Try] {
     override def putPhoto(photo: Photo): Try[PhotoId]      = Success(photoId)
     override def getPhoto(id: PhotoId): Try[Option[Photo]] = Success(None)
+    override val listPhotoIds: Try[Seq[PhotoId]]           = Success(Nil)
   }
 
   private val failingDurableStore = new DurableStoreAlg[Try] {
     override def putPhoto(photo: Photo): Try[PhotoId]      = epicFail
     override def getPhoto(id: PhotoId): Try[Option[Photo]] = epicFail
+    override val listPhotoIds: Try[Seq[PhotoId]]           = Success(Nil)
   }
 
   private val emptyCache = new CacheAlg[Try] {
